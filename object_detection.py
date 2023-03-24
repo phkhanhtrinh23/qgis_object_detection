@@ -137,12 +137,11 @@ class ObjectDetection:
                 pass
             
         # ! Old model
-        from .segmentation import get_largest_object_polygon, DeepLabModel
+        from .segmentation import DeepLabModel
         from .ade import CLASSES
         
         self.DEEPLABMODEL = DeepLabModel(
             os.path.join(os.path.dirname(__file__), "deeplabv3_xception_ade20k_train/frozen_inference_graph.pb")
-            # "deeplabv3_mnv2_ade20k_train_2018_12_03/frozen_inference_graph.pb"
         )
         print("model front view loaded successfully!")
 
@@ -236,15 +235,6 @@ class ObjectDetection:
         self.slider.valueChanged.connect(self.on_slider_value_changed)
         self.toolbar.addWidget(self.slider)
         self.toolbar.addWidget(self.label)
-        
-        # # Add the slider and label widgets to a layout
-        # layout = QHBoxLayout()
-        # layout.addWidget(slider)
-        # layout.addWidget(label)
-
-        # # Create a container widget to hold the layout
-        # widget = QWidget()
-        # widget.setLayout(layout)
 
     def initGui(self):
         self.action = QAction(QIcon("icon.png"), "Draw Rectangle", self.iface.mainWindow())
@@ -279,13 +269,10 @@ class ObjectDetection:
         # Show the dialog and wait for the user to make a selection
         if layer_dialog.exec() == QDialog.Accepted:
             self.layer = layer_combo_box.currentLayer()
-            # self.iface.mapCanvas().setExtent(self.layer.extent())
-            # self.iface.mapCanvas().zoomToFeatureExtent(self.layer.extent())
             layers = QgsProject.instance().mapLayers()
 
             raster_layers = [layer for layer in layers.values() if layer.type() == QgsMapLayerType.RasterLayer]
             self.iface.mapCanvas().zoomToFeatureExtent(raster_layers[0].extent())
-            # self.iface.mapCanvas().zoomToFeatureExtent(layer_image.extent())
             self.iface.mapCanvas().refresh()
 
             self.rectangle_tool = RectangleMapTool(self.iface.mapCanvas())
@@ -460,8 +447,6 @@ class ObjectDetection:
         # ! => add more points to the midpoint of random pairs of points
         size_n = len(new_obj_points)
         
-        print("SIZE NUM_POINTS:", self.num_points, size_n)
-        
         if size_n < self.num_points and size_n >= 3:
             # * pair = [current index, current_index + 1] => cannot count the last index
             # * => range(size_n - 1)
@@ -496,8 +481,6 @@ class ObjectDetection:
             
         polygon_coords.append(polygon_coords[0])
         polygon = QgsGeometry.fromPolygonXY([polygon_coords])
-        
-        print("Coords:", len(polygon_coords))
         
         if edit:
             # Create a feature for the polygon and add it to the list
@@ -572,20 +555,12 @@ class ObjectDetection:
                 self.IDX2CONSIDER_CLASS_NEW,
                 max_n_objects=max_n_objects,
             )
-
-            print("Boxes:", boxes)
             
             if len(boxes) > 0:
                 for obj in boxes:
-                    print("Current num_points:", self.num_points)
-                    print("Obj before slider:", len(obj["points"]))
-                    
                     if len(obj["points"]) > 0:
                         # Adjust the number of points to the slider's value
                         obj_points = self.adjust_points(obj["points"])
-
-                        print("Obj after slider:", len(obj_points))
-                        
                         self.convert_to_polygon(obj_points, flag_minus, label_name=obj["label"], edit=True)
     
     def detect_objects(self, rect_coords):
@@ -624,20 +599,12 @@ class ObjectDetection:
             for label in self.CONSIDER_CLASSES.keys():
                 filter_seg_map[seg_map == self.ORI_CLASS2IDX[label]] = self.CONSIDER_CLASSES[label]
             boxes = get_largest_object_polygon(filter_seg_map, x1, y1, img.width, img.height, self.IDX2CONSIDER_CLASS, max_n_objects)
-
-            print("Boxes:", boxes)
             
             if len(boxes) > 0:
                 for obj in boxes:
-                    print("Current num_points:", self.num_points)
-                    print("Obj before slider:", len(obj["points"]))
-                    
                     if len(obj["points"]) > 0:
                         # Adjust the number of points to the slider's value
                         obj_points = self.adjust_points(obj["points"])
-
-                        print("Obj after slider:", len(obj_points))
-                        
                         self.convert_to_polygon(obj_points, flag_minus, label_name=obj["label"], edit=True)
 
     def unload(self):
