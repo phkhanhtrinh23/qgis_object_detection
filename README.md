@@ -7,7 +7,7 @@ Your QGIS plugin directory should be located at in order for QGIS to plug it in:
 ## What's Next?
 - Customize it by editing the implementation file: ``object_detection.py``
 - Create your own custom icon, replacing the default icon.png
-- Modify your user interface by opening `object_detection_dockwidget_base` in Qt Designer
+- Modify your user interface by opening `object_detection_dockwidget_base.ui` in Qt Designer
 - You can use the Makefile to compile your Ui and resource files when you make changes. This requires GNU make (gmake)
 
 ## Weights
