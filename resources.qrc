@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/object_detection" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>

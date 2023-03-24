@@ -1,0 +1,5 @@
+# ignore log folder
+log/
+
+# ignore deeplabv3_xception_ade20k_train
+deeplabv3_xception_ade20k_train/
