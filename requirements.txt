@@ -37,6 +37,12 @@ segmentation-models-pytorch==0.3.1
 # simplecv @ git+https://github.com/Z-Zheng/SimpleCV.git@4fa67581441ad150e82b3aa2c394a921f74e4ecd
 six==1.16.0
 tensorboardX==1.7
+tensorboard==2.11.0
+tensorboard-data-server==0.6.1
+tensorboard-plugin-wit==1.8.1
+tensorflow==2.11.0
+tensorflow-estimator==2.11.0
+tensorflow-io-gcs-filesystem==0.29.0
 tifffile==2020.9.3
 timm==0.4.12
 torch==1.10.1

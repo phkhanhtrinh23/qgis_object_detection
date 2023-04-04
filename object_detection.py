@@ -105,8 +105,6 @@ class ObjectDetection:
             importlib.import_module('cv2')
             importlib.import_module('PIL')
             importlib.import_module('numpy')
-            importlib.import_module('tensorflow')
-            importlib.import_module('simplecv')
         except ImportError:
             # Prompt user to install packages
             message = 'The plugin requires the some packages to be installed. Do you want to install it now?'
@@ -117,7 +115,6 @@ class ObjectDetection:
                 subprocess.call(['pip', 'install', 'opencv-python==4.7.0'])
                 subprocess.call(['pip', 'install', 'Pillow==9.2.0'])
                 subprocess.call(['pip', 'install', 'numpy==1.20.2'])
-                subprocess.call(['pip', 'install', 'tensorflow==2.11.1'])
             else:
                 # User chose not to install
                 pass
