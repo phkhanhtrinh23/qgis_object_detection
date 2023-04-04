@@ -114,10 +114,10 @@ class ObjectDetection:
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
                 # Install using pip
-                subprocess.call(['pip', 'install', 'opencv-python'])
-                subprocess.call(['pip', 'install', 'Pillow'])
-                subprocess.call(['pip', 'install', 'numpy'])
-                subprocess.call(['pip', 'install', 'tensorflow'])
+                subprocess.call(['pip', 'install', 'opencv-python==4.7.0'])
+                subprocess.call(['pip', 'install', 'Pillow==9.2.0'])
+                subprocess.call(['pip', 'install', 'numpy==1.20.2'])
+                subprocess.call(['pip', 'install', 'tensorflow==2.11.1'])
             else:
                 # User chose not to install
                 pass
