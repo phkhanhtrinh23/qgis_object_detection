@@ -112,9 +112,9 @@ class ObjectDetection:
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
                 # Install using pip
-                subprocess.call([sys.executable, '-m', 'pip', 'install', 'opencv-python==4.7.0'])
-                subprocess.call([sys.executable, '-m', 'pip', 'install', 'Pillow==9.2.0'])
-                subprocess.call([sys.executable, '-m', 'pip', 'install', 'numpy==1.20.2'])
+                subprocess.call(['python3', '-m', 'pip', 'install', 'opencv-python==4.7.0'])
+                subprocess.call(['python3', '-m', 'pip', 'install', 'Pillow==9.2.0'])
+                subprocess.call(['python3', '-m', 'pip', 'install', 'numpy==1.20.2'])
             else:
                 # User chose not to install
                 pass
@@ -128,8 +128,8 @@ class ObjectDetection:
             if result == QMessageBox.Yes:
                 # # * Install requirements.txt
                 requirements_path = os.path.join(os.path.dirname(__file__), 'requirements.txt')
-                subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', requirements_path])
-                subprocess.call([sys.executable, '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
+                subprocess.call(['python3', '-m', 'pip', 'install', '-r', requirements_path])
+                subprocess.call(['python3', '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
             else:
                 pass
             
