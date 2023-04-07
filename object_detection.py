@@ -9,16 +9,26 @@ from qgis.PyQt.QtGui import QIcon, QFont, QColor
 from qgis.PyQt.QtCore import Qt
 
 import os
+from os.path import dirname, abspath
 import math
 import random
 import sys
 random.seed(2023)
 
-sys.path.append(os.path.dirname(__file__))
-sys.path.append(os.path.join(os.path.dirname(__file__), "module"))
+# sys.path.append(os.path.dirname(__file__))
+# sys.path.append(os.path.join(os.path.dirname(__file__), "module"))
 
 import importlib
 import subprocess
+
+def exe_python_path():
+    os_name = sys.platform
+    python_path = ""
+    if os_name == "darwin":
+        python_path = os.path.join(dirname(abspath(sys.executable)), "bin/python3")
+    else:
+        python_path = os.path.join(dirname(abspath(sys.executable)), "python3")
+    return python_path
 
 class RectangleMapTool(QgsMapToolEmitPoint):
     def __init__(self, canvas):
@@ -112,29 +122,36 @@ class ObjectDetection:
             result = QMessageBox.question(self.iface.mainWindow(), 'Install some packages', \
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
+                python_path = exe_python_path()
+                requirements_path = os.path.join(os.path.dirname(__file__), 'requirements.txt')
+                subprocess.call([python_path, '-m', 'pip', 'install', '-r', requirements_path])
                 # Install using pip
-                subprocess.call(['python3', '-m', 'pip', 'install', 'opencv-python==4.7.0.72'])
-                subprocess.call(['python3', '-m', 'pip', 'install', 'Pillow==9.2.0'])
-                subprocess.call(['python3', '-m', 'pip', 'install', 'numpy==1.20.2'])
+                subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-python==4.7.0'])
+                subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-contrib-python', '--upgrade'])
+                subprocess.call([python_path, '-m', 'pip', 'install', 'Pillow==9.2.0'])
+                if sys.platform == "darwin":
+                    subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow-macos==2.11.0'])
+                else:
+                    subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow==2.11.0'])
+                subprocess.call([python_path, '-m', 'pip', 'install', 'numpy==1.23.5'])
+                subprocess.call([python_path, '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
             else:
                 # User chose not to install
                 pass
         
-        try:
-            importlib.import_module('simplecv')
-        except ImportError:
-            message = 'The plugin requires the simplecv package to be installed. Do you want to install it now?'
-            result = QMessageBox.question(self.iface.mainWindow(), 'Install one package', \
-                message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if result == QMessageBox.Yes:
-                # # * Install requirements.txt
-                requirements_path = os.path.join(os.path.dirname(__file__), 'requirements.txt')
-                subprocess.call(['python3', '-m', 'pip', 'install', '--user', '-r', requirements_path])
-                subprocess.call(['python3', '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
-            else:
-                pass
-            
+        # try:
+        #     importlib.import_module('simplecv')
+        # except ImportError:
+        #     message = 'The plugin requires the simplecv package to be installed. Do you want to install it now?'
+        #     result = QMessageBox.question(self.iface.mainWindow(), 'Install one package', \
+        #         message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        #     if result == QMessageBox.Yes:
+        #         # # * Install requirements.txt
+        #         subprocess.call(['python3', '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
+        #     else:
+        #         pass
         # ! Old model
+        
         from .segmentation import DeepLabModel
         from .ade import CLASSES
         

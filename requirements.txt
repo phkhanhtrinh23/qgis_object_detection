@@ -31,16 +31,16 @@ python-dateutil==2.8.2
 PyWavelets==1.1.1
 # PyYAML==6.0
 requests==2.27.1
-scikit-image==0.17.2
+scikit-image==0.18.2
 # scipy==1.5.4
 segmentation-models-pytorch==0.3.1
 # simplecv @ git+https://github.com/Z-Zheng/SimpleCV.git@4fa67581441ad150e82b3aa2c394a921f74e4ecd
 six==1.16.0
 tensorboardX==1.7
-tensorboard==2.11.0
-tensorflow==2.11.0
-tensorflow-estimator==2.11.0
-tensorflow-io-gcs-filesystem==0.29.0
+# tensorboard==2.11.0
+# tensorflow==2.11.0
+# tensorflow-estimator==2.11.0
+# tensorflow-io-gcs-filesystem==0.29.0
 tifffile==2020.9.3
 timm==0.4.12
 torch==1.10.1
