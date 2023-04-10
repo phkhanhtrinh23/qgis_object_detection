@@ -11,12 +11,12 @@ Your QGIS plugin directory should be located at in order for QGIS to plug it in:
 - You can use the Makefile to compile your Ui and resource files when you make changes. This requires GNU make (gmake)
 - You can watch the demo video from this [link](https://www.youtube.com/watch?v=07-P3yuw41o&t=4s&ab_channel=Tr%C3%ACnhPh%E1%BA%A1m)
 
-## Weights
+<!-- ## Weights
 - You can download 2 folders containing pretrained weights from this [link](https://drive.google.com/drive/folders/1Lr_cA6nJc3kMoOzineWcSJ-rXLT5jvv_?usp=sharing):
   - `deeplabv3_xception_ade20k_train`
   - `log`
 
-and place them in this repository: `./qgis_object_detection/`
+and place them in this repository: `./qgis_object_detection/` -->
 
 ## Additional information
 For more information, see the PyQGIS Developer Cookbook at:

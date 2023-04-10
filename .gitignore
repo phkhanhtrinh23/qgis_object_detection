@@ -3,3 +3,7 @@ log/
 
 # ignore deeplabv3_xception_ade20k_train
 deeplabv3_xception_ade20k_train/
+
+# ignore zip file
+log.zip
+deeplabv3_xception_ade20k_train.zip

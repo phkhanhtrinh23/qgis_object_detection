@@ -15,10 +15,11 @@ import random
 import sys
 random.seed(2023)
 
-# sys.path.append(os.path.dirname(__file__))
-# sys.path.append(os.path.join(os.path.dirname(__file__), "module"))
+sys.path.append(os.path.dirname(__file__))
+sys.path.append(os.path.join(os.path.dirname(__file__), "module"))
 
 import importlib
+import subprocess
 import subprocess
 
 def exe_python_path():
@@ -124,20 +125,53 @@ class ObjectDetection:
             if result == QMessageBox.Yes:
                 python_path = exe_python_path()
                 requirements_path = os.path.join(os.path.dirname(__file__), 'requirements.txt')
-                subprocess.call([python_path, '-m', 'pip', 'install', '-r', requirements_path])
+                subprocess.call([python_path, '-m', 'pip', 'install', '--user', '-r', requirements_path])
                 # Install using pip
-                subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-python==4.7.0'])
-                subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-contrib-python', '--upgrade'])
-                subprocess.call([python_path, '-m', 'pip', 'install', 'Pillow==9.2.0'])
+                subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'opencv-python==4.7.0.72'])
+                subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'opencv-contrib-python', '--upgrade'])
+                subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'Pillow==9.2.0'])
                 if sys.platform == "darwin":
                     subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow-macos==2.11.0'])
                 else:
-                    subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow==2.11.0'])
-                subprocess.call([python_path, '-m', 'pip', 'install', 'numpy==1.23.5'])
-                subprocess.call([python_path, '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
+                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'tensorflow==2.11.0'])
+                subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'numpy==1.22.0'])
+                subprocess.call([python_path, '-m', 'pip', 'install', '--user', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
             else:
                 # User chose not to install
                 pass
+        
+        # * ===== Download weights automatically =====
+        message = 'The plugin requires the model weights to be downloaded. Do you want to download it now?'
+        result = QMessageBox.question(self.iface.mainWindow(), 'Download some files', \
+            message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == QMessageBox.Yes:
+            import gdown
+            import shutil
+            
+            url = 'https://drive.google.com/uc?id=1-hm63Ol4hquYu0lmDtyYi6tOaNqelgBA'
+            output = 'deeplabv3_xception_ade20k_train.zip'
+            download_path = os.path.join(os.path.dirname(__file__), output)
+            gdown.download(url, download_path, quiet=False)
+            
+            shutil.unpack_archive(download_path, os.path.dirname(__file__))
+                
+            url = 'https://drive.google.com/uc?id=1MgRpXNFcJCAdzIwF_aC54o44OSoyihJW'
+            output = 'log.zip'
+            download_path = os.path.join(os.path.dirname(__file__), output)
+            gdown.download(url, download_path, quiet=False)
+            
+            shutil.unpack_archive(download_path, os.path.dirname(__file__))
+        else:
+            pass
+        
+        message = 'It is required that you reopen QGIS to apply the pre-installed plugins. \
+                    Do you want to shut it down now?'
+        result = QMessageBox.question(self.iface.mainWindow(), 'Reopen QGIS', \
+            message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == QMessageBox.Yes:
+            self.iface.actionExit().trigger()
+        else:
+            pass
         
         # try:
         #     importlib.import_module('simplecv')
@@ -150,8 +184,8 @@ class ObjectDetection:
         #         subprocess.call(['python3', '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
         #     else:
         #         pass
-        # ! Old model
         
+        # ! Old model
         from .segmentation import DeepLabModel
         from .ade import CLASSES
         
