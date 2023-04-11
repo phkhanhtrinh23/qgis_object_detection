@@ -132,9 +132,10 @@ class ObjectDetection:
                 subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'Pillow==9.2.0'])
                 if sys.platform == "darwin":
                     subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow-macos==2.11.0'])
+                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'numpy==1.23.5'])
                 else:
                     subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'tensorflow==2.11.0'])
-                subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'numpy==1.22.0'])
+                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'numpy==1.22.0'])
                 subprocess.call([python_path, '-m', 'pip', 'install', '--user', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
             else:
                 # User chose not to install
@@ -173,19 +174,6 @@ class ObjectDetection:
         else:
             pass
         
-        # try:
-        #     importlib.import_module('simplecv')
-        # except ImportError:
-        #     message = 'The plugin requires the simplecv package to be installed. Do you want to install it now?'
-        #     result = QMessageBox.question(self.iface.mainWindow(), 'Install one package', \
-        #         message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        #     if result == QMessageBox.Yes:
-        #         # # * Install requirements.txt
-        #         subprocess.call(['python3', '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
-        #     else:
-        #         pass
-        
-        # ! Old model
         from .segmentation import DeepLabModel
         from .ade import CLASSES
         
