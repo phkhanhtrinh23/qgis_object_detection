@@ -131,6 +131,10 @@ class ObjectDetection:
                 subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-contrib-python', '--upgrade'])
                 subprocess.call([python_path, '-m', 'pip', 'install', 'Pillow==9.2.0'])
                 if sys.platform == "darwin":
+                    subprocess.call([python_path, '-m', 'pip', 'install', '-r', requirements_path])
+                    subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-python==4.7.0.72'])
+                    subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-contrib-python', '--upgrade'])
+                    subprocess.call([python_path, '-m', 'pip', 'install', 'Pillow==9.2.0'])
                     subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow-macos==2.11.0'])
                     subprocess.call([python_path, '-m', 'pip', 'install', 'numpy==1.23.5'])
                 else:
@@ -180,8 +184,7 @@ class ObjectDetection:
                 check_download = True
         
         if check_download:
-            message = 'It is required that you reopen QGIS to apply the pre-installed plugins. \
-                        Do you want to shut it down now?'
+            message = 'It is required that you reopen QGIS to apply the pre-installed plugins. Do you want to shut it down now?'
             result = QMessageBox.question(self.iface.mainWindow(), 'Reopen QGIS', \
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
@@ -191,7 +194,6 @@ class ObjectDetection:
         
         from .segmentation import DeepLabModel
         from .ade import CLASSES
-        
         self.DEEPLABMODEL = DeepLabModel(
             os.path.join(os.path.dirname(__file__), "deeplabv3_xception_ade20k_train/frozen_inference_graph.pb")
         )
