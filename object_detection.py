@@ -15,8 +15,8 @@ import random
 import sys
 random.seed(2023)
 
-sys.path.append(os.path.dirname(__file__))
-sys.path.append(os.path.join(os.path.dirname(__file__), "module"))
+# sys.path.append(os.path.dirname(__file__))
+# sys.path.append(os.path.join(os.path.dirname(__file__), "module"))
 
 import importlib
 import subprocess
@@ -112,18 +112,18 @@ class ObjectDetection:
         self.num_points = 20
         self.rectangle_tool = None
         self.toolbar = self.iface.addToolBar('My Plugin Toolbar')
+        python_path = exe_python_path()
         try:
             subprocess.call(['python3', '-m', 'pip', 'install', '--upgrade', 'pip'])
-            importlib.import_module('cv2')
-            importlib.import_module('PIL')
-            importlib.import_module('numpy')
+            import cv2
+            import PIL
+            import numpy
         except ImportError:
             # Prompt user to install packages
             message = 'The plugin requires the some packages to be installed. Do you want to install it now?'
             result = QMessageBox.question(self.iface.mainWindow(), 'Install some packages', \
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
-                python_path = exe_python_path()
                 requirements_path = os.path.join(os.path.dirname(__file__), 'requirements.txt')
                 subprocess.call([python_path, '-m', 'pip', 'install', '--user', '-r', requirements_path])
                 # Install using pip
@@ -140,7 +140,10 @@ class ObjectDetection:
             else:
                 # User chose not to install
                 pass
-        
+        try:
+            import gdown
+        except:
+            subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'gdown==4.7.1'])
         # * ===== Download weights automatically =====
         check_download = False
                 
@@ -151,14 +154,9 @@ class ObjectDetection:
             result = QMessageBox.question(self.iface.mainWindow(), 'Download some files', \
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
-                try:
-                    importlib.import_module('gdown')
-                except:
-                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'gdown==4.7.1'])
-                import gdown
                 import shutil
                 url = 'https://drive.google.com/uc?id=1-hm63Ol4hquYu0lmDtyYi6tOaNqelgBA'
-                output = 'deeplabv3_xception_ade20k_train'
+                output = 'deeplabv3_xception_ade20k_train.zip'
                 download_path = os.path.join(os.path.dirname(__file__), output)
                 gdown.download(url, download_path, quiet=False)
                 shutil.unpack_archive(download_path, os.path.dirname(__file__))
@@ -171,10 +169,6 @@ class ObjectDetection:
             result = QMessageBox.question(self.iface.mainWindow(), 'Download some files', \
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
-                try:
-                    importlib.import_module('gdown')
-                except:
-                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'gdown==4.7.1'])
                 import gdown
                 import shutil
                 url = 'https://drive.google.com/uc?id=1MgRpXNFcJCAdzIwF_aC54o44OSoyihJW'
@@ -183,6 +177,7 @@ class ObjectDetection:
                 gdown.download(url, download_path, quiet=False)
                 shutil.unpack_archive(download_path, os.path.dirname(__file__))
                 check_download = True
+                subprocess.call(["rm", '-rf', download_path])
         
         if check_download:
             message = 'It is required that you reopen QGIS to apply the pre-installed plugins. \
