@@ -132,9 +132,10 @@ class ObjectDetection:
                 subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'Pillow==9.2.0'])
                 if sys.platform == "darwin":
                     subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow-macos==2.11.0'])
+                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'numpy==1.23.5'])
                 else:
                     subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'tensorflow==2.11.0'])
-                subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'numpy==1.22.0'])
+                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'numpy==1.22.0'])
                 subprocess.call([python_path, '-m', 'pip', 'install', '--user', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
             else:
                 # User chose not to install
