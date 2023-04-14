@@ -161,6 +161,7 @@ class ObjectDetection:
                 gdown.download(url, download_path, quiet=False)
                 shutil.unpack_archive(download_path, os.path.dirname(__file__))
                 check_download = True
+                subprocess.call(["rm", '-rf', download_path])
         
         output = 'log'
         folder_path = os.path.join(os.path.dirname(__file__), output)
