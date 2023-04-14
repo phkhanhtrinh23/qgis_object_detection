@@ -141,51 +141,58 @@ class ObjectDetection:
                 pass
         
         # * ===== Download weights automatically =====
-        message = 'The plugin requires the model weights to be downloaded. Do you want to download it now?'
-        result = QMessageBox.question(self.iface.mainWindow(), 'Download some files', \
-            message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if result == QMessageBox.Yes:
-            import gdown
-            import shutil
-            
-            url = 'https://drive.google.com/uc?id=1-hm63Ol4hquYu0lmDtyYi6tOaNqelgBA'
-            output = 'deeplabv3_xception_ade20k_train.zip'
-            download_path = os.path.join(os.path.dirname(__file__), output)
-            gdown.download(url, download_path, quiet=False)
-            
-            shutil.unpack_archive(download_path, os.path.dirname(__file__))
+        check_download = False
                 
-            url = 'https://drive.google.com/uc?id=1MgRpXNFcJCAdzIwF_aC54o44OSoyihJW'
-            output = 'log.zip'
-            download_path = os.path.join(os.path.dirname(__file__), output)
-            gdown.download(url, download_path, quiet=False)
-            
-            shutil.unpack_archive(download_path, os.path.dirname(__file__))
-        else:
-            pass
+        output = 'deeplabv3_xception_ade20k_train'
+        folder_path = os.path.join(os.path.dirname(__file__), output)
+        if os.path.exists(folder_path) is False:
+            message = 'The plugin requires some model weights to be downloaded. Do you want to download it now?'
+            result = QMessageBox.question(self.iface.mainWindow(), 'Download some files', \
+                message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if result == QMessageBox.Yes:
+                try:
+                    importlib.import_module('gdown')
+                except:
+                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'gdown==4.7.1'])
+                import gdown
+                import shutil
+                url = 'https://drive.google.com/uc?id=1-hm63Ol4hquYu0lmDtyYi6tOaNqelgBA'
+                output = 'deeplabv3_xception_ade20k_train'
+                download_path = os.path.join(os.path.dirname(__file__), output)
+                gdown.download(url, download_path, quiet=False)
+                shutil.unpack_archive(download_path, os.path.dirname(__file__))
+                check_download = True
         
-        message = 'It is required that you reopen QGIS to apply the pre-installed plugins. \
-                    Do you want to shut it down now?'
-        result = QMessageBox.question(self.iface.mainWindow(), 'Reopen QGIS', \
-            message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if result == QMessageBox.Yes:
-            self.iface.actionExit().trigger()
-        else:
-            pass
+        output = 'log'
+        folder_path = os.path.join(os.path.dirname(__file__), output)
+        if os.path.exists(folder_path) is False:   
+            message = 'The plugin requires some model weights to be downloaded. Do you want to download it now?'
+            result = QMessageBox.question(self.iface.mainWindow(), 'Download some files', \
+                message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if result == QMessageBox.Yes:
+                try:
+                    importlib.import_module('gdown')
+                except:
+                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'gdown==4.7.1'])
+                import gdown
+                import shutil
+                url = 'https://drive.google.com/uc?id=1MgRpXNFcJCAdzIwF_aC54o44OSoyihJW'
+                output = 'log.zip'
+                download_path = os.path.join(os.path.dirname(__file__), output)
+                gdown.download(url, download_path, quiet=False)
+                shutil.unpack_archive(download_path, os.path.dirname(__file__))
+                check_download = True
         
-        # try:
-        #     importlib.import_module('simplecv')
-        # except ImportError:
-        #     message = 'The plugin requires the simplecv package to be installed. Do you want to install it now?'
-        #     result = QMessageBox.question(self.iface.mainWindow(), 'Install one package', \
-        #         message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        #     if result == QMessageBox.Yes:
-        #         # # * Install requirements.txt
-        #         subprocess.call(['python3', '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
-        #     else:
-        #         pass
+        if check_download:
+            message = 'It is required that you reopen QGIS to apply the pre-installed plugins. \
+                        Do you want to shut it down now?'
+            result = QMessageBox.question(self.iface.mainWindow(), 'Reopen QGIS', \
+                message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if result == QMessageBox.Yes:
+                self.iface.actionExit().trigger()
+            else:
+                pass
         
-        # ! Old model
         from .segmentation import DeepLabModel
         from .ade import CLASSES
         
@@ -210,7 +217,6 @@ class ObjectDetection:
 
         self.IDX2CONSIDER_CLASS = {1: "building", 2: "car+truck", 3: "plane"}
         
-        # ! New Model
         import simplecv as sc
         from .data.isaid import COLOR_MAP
         from simplecv.api.preprocess import comm
