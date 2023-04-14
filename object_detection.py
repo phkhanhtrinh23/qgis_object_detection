@@ -154,6 +154,7 @@ class ObjectDetection:
             result = QMessageBox.question(self.iface.mainWindow(), 'Download some files', \
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
+                import gdown
                 import shutil
                 url = 'https://drive.google.com/uc?id=1-hm63Ol4hquYu0lmDtyYi6tOaNqelgBA'
                 output = 'deeplabv3_xception_ade20k_train.zip'
