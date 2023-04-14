@@ -15,8 +15,8 @@ import random
 import sys
 random.seed(2023)
 
-# sys.path.append(os.path.dirname(__file__))
-# sys.path.append(os.path.join(os.path.dirname(__file__), "module"))
+sys.path.append(os.path.dirname(__file__))
+sys.path.append(os.path.join(os.path.dirname(__file__), "module"))
 
 import importlib
 import subprocess
