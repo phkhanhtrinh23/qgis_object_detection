@@ -112,6 +112,7 @@ class ObjectDetection:
         self.toolbar = self.iface.addToolBar('My Plugin Toolbar')
         python_path = exe_python_path()
         try:
+            # subprocess.call(['python3', '-m', 'pip', 'install', '--upgrade', 'pip'])
             import cv2
             import PIL
             import numpy
@@ -122,6 +123,11 @@ class ObjectDetection:
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
                 requirements_path = os.path.join(os.path.dirname(__file__), 'requirements.txt')
+                subprocess.call([python_path, '-m', 'pip', 'install', '-r', requirements_path])
+                # Install using pip
+                subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-python==4.7.0.72'])
+                subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-contrib-python', '--upgrade'])
+                subprocess.call([python_path, '-m', 'pip', 'install', 'Pillow==9.2.0'])
                 if sys.platform == "darwin":
                     subprocess.call([python_path, '-m', 'pip', 'install', '-r', requirements_path])
                     subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-python==4.7.0.72'])
@@ -130,21 +136,16 @@ class ObjectDetection:
                     subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow-macos==2.11.0'])
                     subprocess.call([python_path, '-m', 'pip', 'install', 'numpy==1.23.5'])
                 else:
-                    subprocess.call([python_path, '-m', 'pip', 'install', '--upgrade', 'pip'])
-                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', '-r', requirements_path])
-                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'opencv-python==4.7.0.72'])
-                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'opencv-contrib-python', '--upgrade'])
-                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'Pillow==9.2.0'])
-                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'tensorflow==2.11.0'])
-                    subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'numpy==1.22.0'])
-                subprocess.call([python_path, '-m', 'pip', 'install', '--user', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
+                    subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow==2.11.0'])
+                    subprocess.call([python_path, '-m', 'pip', 'install', 'numpy==1.22.0'])
+                subprocess.call([python_path, '-m', 'pip', 'install', '-i', 'https://test.pypi.org/simple/', 'simplecv==0.0.2'])
             else:
                 # User chose not to install
                 pass
         try:
             import gdown
         except:
-            subprocess.call([python_path, '-m', 'pip', 'install', '--user', 'gdown==4.7.1'])
+            subprocess.call([python_path, '-m', 'pip', 'install', 'gdown==4.7.1'])
         # * ===== Download weights automatically =====
         check_download = False
                 
@@ -181,8 +182,7 @@ class ObjectDetection:
                 check_download = True
         
         if check_download:
-            message = 'It is required that you reopen QGIS to apply the pre-installed plugins. \
-                        Do you want to shut it down now?'
+            message = 'It is required that you reopen QGIS to apply the pre-installed plugins. Do you want to shut it down now?'
             result = QMessageBox.question(self.iface.mainWindow(), 'Reopen QGIS', \
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
