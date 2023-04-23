@@ -18,8 +18,6 @@ random.seed(2023)
 sys.path.append(os.path.dirname(__file__))
 sys.path.append(os.path.join(os.path.dirname(__file__), "module"))
 
-import importlib
-import subprocess
 import subprocess
 
 def exe_python_path():
@@ -249,7 +247,6 @@ class ObjectDetection:
         self.log_dir = self.model_dir
         self.ckpt_path=os.path.join(os.path.dirname(__file__), "log", "factseg50.pth")
         self.patch_size = 896
-
         self.model, self.global_step = sc.api.infer_tool.build_and_load_from_file(self.config_path, self.ckpt_path)
         self.segm_helper = SegmSlidingWinInference()
         

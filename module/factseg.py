@@ -3,14 +3,14 @@
 
 from simplecv.module.resnet import ResNetEncoder
 from simplecv.module.fpn import FPN
-from semantic_fpn import AssymetricDecoder
+from module.semantic_fpn import AssymetricDecoder
 from simplecv.interface import CVModule
 from simplecv import registry
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from loss import JointLoss
-from loss import ohem_cross_entropy, InverseWeightCrossEntroyLoss
+from module.loss import JointLoss
+from module.loss import ohem_cross_entropy, InverseWeightCrossEntroyLoss
 
 def som(loss, ratio):
     # 1. keep num
@@ -49,7 +49,6 @@ class FactSeg(CVModule):
             self.inversece_loss = InverseWeightCrossEntroyLoss(self.config.num_classes, 255)
 
     def forward(self, x, y=None):
-        print(x.shape)
         #x, cls_true = x[:, :3, :, :], x[:, -1, :, :]
     
         feat_list = self.resencoder(x)
