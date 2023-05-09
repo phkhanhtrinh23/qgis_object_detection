@@ -109,7 +109,7 @@ class ObjectDetection:
         self.layer = None
         self.num_points = 20
         self.rectangle_tool = None
-        self.toolbar = self.iface.addToolBar('My Plugin Toolbar')
+        self.toolbar = self.iface.addToolBar('Object Detection')
         python_path = exe_python_path()
         try:
             # subprocess.call(['python3', '-m', 'pip', 'install', '--upgrade', 'pip'])
@@ -129,10 +129,6 @@ class ObjectDetection:
                 subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-contrib-python', '--upgrade'])
                 subprocess.call([python_path, '-m', 'pip', 'install', 'Pillow==9.2.0'])
                 if sys.platform == "darwin":
-                    subprocess.call([python_path, '-m', 'pip', 'install', '-r', requirements_path])
-                    subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-python==4.7.0.72'])
-                    subprocess.call([python_path, '-m', 'pip', 'install', 'opencv-contrib-python', '--upgrade'])
-                    subprocess.call([python_path, '-m', 'pip', 'install', 'Pillow==9.2.0'])
                     subprocess.call([python_path, '-m', 'pip', 'install', 'tensorflow-macos==2.11.0'])
                     subprocess.call([python_path, '-m', 'pip', 'install', 'numpy==1.23.5'])
                 else:
@@ -152,7 +148,7 @@ class ObjectDetection:
         output = 'deeplabv3_xception_ade20k_train'
         folder_path = os.path.join(os.path.dirname(__file__), output)
         if os.path.exists(folder_path) is False:
-            message = 'The plugin requires some model weights to be downloaded. Do you want to download it now?'
+            message = 'The plugin requires front-view model weights to be downloaded. Do you want to download it now?'
             result = QMessageBox.question(self.iface.mainWindow(), 'Download some files', \
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
@@ -161,14 +157,15 @@ class ObjectDetection:
                 url = 'https://drive.google.com/uc?id=1-hm63Ol4hquYu0lmDtyYi6tOaNqelgBA'
                 output = 'deeplabv3_xception_ade20k_train.zip'
                 download_path = os.path.join(os.path.dirname(__file__), output)
-                gdown.download(url, download_path, quiet=False)
+                gdown.download(url, download_path, quiet=True)
                 shutil.unpack_archive(download_path, os.path.dirname(__file__))
                 check_download = True
+                os.remove(download_path)
         
         output = 'log'
         folder_path = os.path.join(os.path.dirname(__file__), output)
         if os.path.exists(folder_path) is False:   
-            message = 'The plugin requires some model weights to be downloaded. Do you want to download it now?'
+            message = 'The plugin requires top-view model weights to be downloaded. Do you want to download it now?'
             result = QMessageBox.question(self.iface.mainWindow(), 'Download some files', \
                 message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == QMessageBox.Yes:
@@ -177,9 +174,10 @@ class ObjectDetection:
                 url = 'https://drive.google.com/uc?id=1MgRpXNFcJCAdzIwF_aC54o44OSoyihJW'
                 output = 'log.zip'
                 download_path = os.path.join(os.path.dirname(__file__), output)
-                gdown.download(url, download_path, quiet=False)
+                gdown.download(url, download_path, quiet=True)
                 shutil.unpack_archive(download_path, os.path.dirname(__file__))
                 check_download = True
+                os.remove(download_path)
         
         if check_download:
             message = 'It is required that you reopen QGIS to apply the pre-installed plugins. Do you want to shut it down now?'
@@ -287,7 +285,8 @@ class ObjectDetection:
         self.toolbar.addWidget(self.label)
 
     def initGui(self):
-        self.action = QAction(QIcon("icon.png"), "Draw Rectangle", self.iface.mainWindow())
+        icon_path = os.path.join(os.path.dirname(__file__), 'icon.png')
+        self.action = QAction(QIcon(icon_path), "Draw Rectangle", self.iface.mainWindow())
         self.action.triggered.connect(self.run)
         self.iface.addToolBarIcon(self.action)
 
